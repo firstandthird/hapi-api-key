@@ -1,0 +1,38 @@
+{
+  "name": "hapi-api-key",
+  "version": "1.0.0",
+  "description": "Authentication strategy for API keys",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/firstandthird/hapi-api-key.git"
+  },
+  "bugs": {
+    "url": "https://github.com/firstandthird/hapi-api-key/issues"
+  },
+  "homepage": "https://github.com/firstandthird/hapi-api-key",
+  "dependencies": {
+    "boom": "^3.2.1",
+    "hoek": "^4.0.1"
+  },
+  "devDependencies": {
+    "hapi": "^13.4.1",
+    "code": "2.0.1",
+    "lab": "7.3.0",
+    "eslint": "2.9.0",
+    "eslint-config-airbnb": "8.0.0",
+    "eslint-config-firstandthird": "^2.0.0",
+    "eslint-plugin-import": "^1.6.0",
+    "eslint-plugin-react": "^5.1.1"
+  },
+  "keywords": [
+    "hapi",
+    "authentication",
+    "scheme",
+    "api key"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "test": "lab -e test"
+  }
+}
