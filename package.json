@@ -12,11 +12,10 @@
   },
   "homepage": "https://github.com/firstandthird/hapi-api-key",
   "dependencies": {
-    "boom": "^3.2.1",
+    "boom": "^3.2.2",
     "hoek": "^4.0.1"
   },
   "devDependencies": {
-    "boom": "^3.2.2",
     "code": "2.0.1",
     "eslint": "2.9.0",
     "eslint-config-airbnb": "8.0.0",
@@ -24,7 +23,6 @@
     "eslint-plugin-import": "^1.6.0",
     "eslint-plugin-react": "^5.1.1",
     "hapi": "^13.4.1",
-    "hoek": "^4.0.1",
     "lab": "7.3.0"
   },
   "keywords": [
