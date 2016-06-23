@@ -25,7 +25,13 @@ lab.test('will reject normal requests ', (done) => {
     if (err) {
       console.log(err);
     }
-    server.auth.strategy('api-key', 'api-key', true, {});
+    server.auth.strategy('api-key', 'api-key', true, {
+      apiKeys: {
+        'knockknock' : {
+          name: 'Who Is There'
+        }
+      }
+    });
     server.route({
       method: 'GET',
       path: '/',
@@ -52,7 +58,13 @@ lab.test('will reject requests with a bad api key ', (done) => {
     if (err) {
       console.log(err);
     }
-    server.auth.strategy('api-key', 'api-key', true, {});
+    server.auth.strategy('api-key', 'api-key', true, {
+      apiKeys: {
+        'knockknock' : {
+          name: 'Who Is There'
+        }
+      }
+    });
     server.route({
       method: 'GET',
       path: '/',
@@ -79,7 +91,13 @@ lab.test('should allow passage if a correct api key is posted ', (done) => {
     if (err) {
       console.log(err);
     }
-    server.auth.strategy('api-key', 'api-key', true, {});
+    server.auth.strategy('api-key', 'api-key', true, {
+      apiKeys: {
+        'knockknock' : {
+          name: 'Who Is There'
+        }
+      }
+    });
     server.route({
       method: 'GET',
       path: '/',
@@ -140,6 +158,11 @@ lab.test('lets you specify a name for the param that contains the api key ', (do
       console.log(err);
     }
     server.auth.strategy('api-key', 'api-key', true, {
+      apiKeys: {
+        'knockknock' : {
+          name: 'Who Is There'
+        }
+      },
       queryKey: 'api'
     });
     server.route({
@@ -168,7 +191,13 @@ lab.test('you can pass the api key in the X-API-KEY header as well', (done) => {
     if (err) {
       console.log(err);
     }
-    server.auth.strategy('api-key', 'api-key', true, {});
+    server.auth.strategy('api-key', 'api-key', true, {
+      apiKeys: {
+        'knockknock' : {
+          name: 'Who Is There'
+        }
+      }
+    });
     server.route({
       method: 'GET',
       path: '/',
