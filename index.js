@@ -21,6 +21,8 @@ exports.register = (server, pluginOptions, next) => {
     return {
       authenticate: (request, reply) => {
         // check in both the query params and the X-API-KEY header for an api key:
+        const apiKey = request.headers[options.headerKey] ?
+          request.headers[options.headerKey] : request.query[options.queryKey];
         // get the credentials for this key:
         const credentials = options.apiKeys[apiKey];
         if (credentials !== undefined) {
