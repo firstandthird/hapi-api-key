@@ -226,13 +226,12 @@ lab.test('you can specify api keys when you register', (done) => {
       strategy: {
         name: 'api-key',
         mode: true,
-        apiKeys: [
-          [
-            'knockknock',
-            {
+        apiKeys: [{
+            key: 'knockknock',
+            credentials: {
               name: 'whoIsThere'
             }
-          ]
+          }
         ]
       }
     }
