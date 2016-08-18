@@ -1,3 +1,4 @@
+'use strict';
 const Boom = require('boom');
 const Hoek = require('hoek');
 
