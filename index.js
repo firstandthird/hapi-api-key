@@ -33,6 +33,32 @@ exports.register = (server, pluginOptions, next) => {
       }
     };
   });
+  /* will call server.auth.strategy
+   package should be of the form:
+   strategy: {
+    name: 'myStrategyName',
+    mode: true // (can be any valid strategy mode)
+    apiKeys: [
+      [
+        'anAPIKey',
+        {
+          name: 'authenticationName'
+        }
+      ]
+    ]
+   }
+  */
+  if (pluginOptions.strategy) {
+    const options = {
+      apiKeys: {}
+    };
+    pluginOptions.strategy.apiKeys.forEach((apikey) => {
+      options.apiKeys[apikey[0]] = apikey[1];
+    });
+    server.auth.strategy(pluginOptions.schemeName,
+      pluginOptions.strategy.name,
+      pluginOptions.strategy.mode, options);
+  }
   next();
 };
 

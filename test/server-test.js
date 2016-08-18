@@ -218,3 +218,42 @@ lab.test('you can pass the api key in the X-API-KEY header as well', (done) => {
     });
   });
 });
+
+lab.test('you can specify api keys when you register', (done) => {
+  server.register({
+    register: hapiApiKeyPlugin,
+    options: {
+      strategy: {
+        name: 'api-key',
+        mode: true,
+        apiKeys: [
+          [
+            'knockknock',
+            {
+              name: 'whoIsThere'
+            }
+          ]
+        ]
+      }
+    }
+  }, (err) => {
+    if (err) {
+      console.log(err);
+    }
+    server.route({
+      method: 'GET',
+      path: '/',
+      config: {
+        handler: (request, reply) => {
+          reply(request.auth);
+        }
+      }
+    });
+    server.inject({
+      url: '/?token=knockknock',
+    }, (response) => {
+      code.expect(response.statusCode).to.equal(200);
+      done();
+    });
+  });
+});
