@@ -39,25 +39,18 @@ exports.register = (server, pluginOptions, next) => {
    strategy: {
     name: 'myStrategyName',
     mode: true // (can be any valid strategy mode)
-    apiKeys: [
-      {
-        key: 'anAPIKey',
-        credentials: {
-          name: 'authenticationName'
-        }
+    apiKeys: {
+      'anAPIKey': {
+        name: 'authenticationName'
+      }
     ]
    }
   */
   if (pluginOptions.strategy) {
-    const options = {
-      apiKeys: {}
-    };
-    pluginOptions.strategy.apiKeys.forEach((apikey) => {
-      options.apiKeys[apikey.key] = apikey.credentials;
-    });
-    server.auth.strategy(pluginOptions.schemeName,
-      pluginOptions.strategy.name,
-      pluginOptions.strategy.mode, options);
+    server.auth.strategy(pluginOptions.strategy.name,
+      pluginOptions.schemeName,
+      pluginOptions.strategy.mode,
+      { apiKeys: pluginOptions.strategy.apiKeys });
   }
   next();
 };

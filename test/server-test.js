@@ -7,7 +7,7 @@ const hapiApiKeyPlugin = require('../index.js');
 let server;
 lab.beforeEach((done) => {
   server = new Hapi.Server({});
-  server.connection({ port: 8080 });
+  server.connection();
   done();
 });
 
@@ -23,7 +23,7 @@ lab.test('will reject normal requests ', (done) => {
     options: {}
   }, (err) => {
     if (err) {
-      console.log(err);
+      throw err;
     }
     server.auth.strategy('api-key', 'api-key', true, {
       apiKeys: {
@@ -56,7 +56,7 @@ lab.test('will reject requests with a bad api key ', (done) => {
     options: {}
   }, (err) => {
     if (err) {
-      console.log(err);
+      throw err;
     }
     server.auth.strategy('api-key', 'api-key', true, {
       apiKeys: {
@@ -89,7 +89,7 @@ lab.test('should allow passage if a correct api key is posted ', (done) => {
     options: {}
   }, (err) => {
     if (err) {
-      console.log(err);
+      throw err;
     }
     server.auth.strategy('api-key', 'api-key', true, {
       apiKeys: {
@@ -122,7 +122,7 @@ lab.test('lets you pass a custom list of api keys ', (done) => {
     options: {}
   }, (err) => {
     if (err) {
-      console.log(err);
+      throw err;
     }
     server.auth.strategy('api-key', 'api-key', true, {
       apiKeys: {
@@ -155,7 +155,7 @@ lab.test('lets you specify a name for the param that contains the api key ', (do
     options: {}
   }, (err) => {
     if (err) {
-      console.log(err);
+      throw err;
     }
     server.auth.strategy('api-key', 'api-key', true, {
       apiKeys: {
@@ -189,7 +189,7 @@ lab.test('you can pass the api key in the X-API-KEY header as well', (done) => {
     options: {}
   }, (err) => {
     if (err) {
-      console.log(err);
+      throw err;
     }
     server.auth.strategy('api-key', 'api-key', true, {
       apiKeys: {
@@ -224,35 +224,39 @@ lab.test('you can specify api keys when you register', (done) => {
     register: hapiApiKeyPlugin,
     options: {
       strategy: {
-        name: 'api-key',
-        mode: true,
-        apiKeys: [{
-            key: 'knockknock',
-            credentials: {
-              name: 'whoIsThere'
-            }
+        name: 'apikey',
+        mode: false,
+        apiKeys: {
+          knockknock: {
+            name: 'whoIsThere'
           }
-        ]
+        }
       }
     }
   }, (err) => {
     if (err) {
-      console.log(err);
+      throw err;
     }
     server.route({
       method: 'GET',
       path: '/',
       config: {
-        handler: (request, reply) => {
-          reply(request.auth);
-        }
+        auth: 'apikey'
+      },
+      handler(request, reply) {
+        reply(request.auth);
       }
     });
     server.inject({
       url: '/?token=knockknock',
     }, (response) => {
       code.expect(response.statusCode).to.equal(200);
-      done();
+      server.inject({
+        url: '/?token=knockknock2',
+      }, (response) => {
+        code.expect(response.statusCode).to.equal(401);
+        done();
+      });
     });
   });
 });
