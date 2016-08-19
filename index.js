@@ -1,3 +1,4 @@
+'use strict';
 const Boom = require('boom');
 const Hoek = require('hoek');
 
@@ -33,6 +34,24 @@ exports.register = (server, pluginOptions, next) => {
       }
     };
   });
+  /* will call server.auth.strategy
+   package should be of the form:
+   strategy: {
+    name: 'myStrategyName',
+    mode: true // (can be any valid strategy mode)
+    apiKeys: {
+      'anAPIKey': {
+        name: 'authenticationName'
+      }
+    ]
+   }
+  */
+  if (pluginOptions.strategy) {
+    server.auth.strategy(pluginOptions.strategy.name,
+      pluginOptions.schemeName,
+      pluginOptions.strategy.mode,
+      { apiKeys: pluginOptions.strategy.apiKeys });
+  }
   next();
 };
 
