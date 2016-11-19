@@ -260,3 +260,38 @@ lab.test('you can specify api keys when you register', (done) => {
     });
   });
 });
+
+lab.test('lets you pass a validate function', (done) => {
+  server.register({
+    register: hapiApiKeyPlugin,
+    options: {}
+  }, (err) => {
+    if (err) {
+      throw err;
+    }
+    server.auth.strategy('api-key', 'api-key', true, {
+      validateKey(token, next) {
+        if (token === 'test') {
+          return next({
+            name: 'This is a test'
+          });
+        }
+      }
+    });
+    server.route({
+      method: 'GET',
+      path: '/',
+      config: {
+        handler: (request, reply) => {
+          reply(request.auth);
+        }
+      }
+    });
+    server.inject({
+      url: '/?token=test',
+    }, (response) => {
+      code.expect(response.statusCode).to.equal(200);
+      done();
+    });
+  });
+});
