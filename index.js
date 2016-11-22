@@ -26,6 +26,12 @@ exports.register = (server, pluginOptions, next) => {
       validateKey = (token, done) => {
         done(options.apiKeys[token]);
       };
+
+      if (typeof options.validateKey === 'string') {
+        validateKey = Hoek.reach(server.methods, options.validateKey, {
+          default: validateKey
+        });
+      }
     }
 
     return {
