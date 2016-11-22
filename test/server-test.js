@@ -27,7 +27,7 @@ lab.test('will reject normal requests ', (done) => {
     }
     server.auth.strategy('api-key', 'api-key', true, {
       apiKeys: {
-        'knockknock' : {
+        knockknock: {
           name: 'Who Is There'
         }
       }
@@ -60,7 +60,7 @@ lab.test('will reject requests with a bad api key ', (done) => {
     }
     server.auth.strategy('api-key', 'api-key', true, {
       apiKeys: {
-        'knockknock' : {
+        knockknock: {
           name: 'Who Is There'
         }
       }
@@ -93,7 +93,7 @@ lab.test('should allow passage if a correct api key is posted ', (done) => {
     }
     server.auth.strategy('api-key', 'api-key', true, {
       apiKeys: {
-        'knockknock' : {
+        knockknock: {
           name: 'Who Is There'
         }
       }
@@ -159,7 +159,7 @@ lab.test('lets you specify a name for the param that contains the api key ', (do
     }
     server.auth.strategy('api-key', 'api-key', true, {
       apiKeys: {
-        'knockknock' : {
+        knockknock: {
           name: 'Who Is There'
         }
       },
@@ -193,7 +193,7 @@ lab.test('you can pass the api key in the X-API-KEY header as well', (done) => {
     }
     server.auth.strategy('api-key', 'api-key', true, {
       apiKeys: {
-        'knockknock' : {
+        knockknock: {
           name: 'Who Is There'
         }
       }
@@ -253,8 +253,8 @@ lab.test('you can specify api keys when you register', (done) => {
       code.expect(response.statusCode).to.equal(200);
       server.inject({
         url: '/?token=knockknock2',
-      }, (response) => {
-        code.expect(response.statusCode).to.equal(401);
+      }, (response2) => {
+        code.expect(response2.statusCode).to.equal(401);
         done();
       });
     });

@@ -17,12 +17,9 @@
   },
   "devDependencies": {
     "code": "2.0.1",
-    "eslint": "^2.13.1",
-    "eslint-config-airbnb": "^8.0.0",
-    "eslint-config-firstandthird": "^2.0.0",
-    "eslint-plugin-import": "^1.9.2",
-    "eslint-plugin-jsx-a11y": "^1.5.3",
-    "eslint-plugin-react": "^5.2.2",
+    "eslint": "^3.9.1",
+    "eslint-config-firstandthird": "^3.1.0",
+    "eslint-plugin-import": "^2.1.0",
     "hapi": "^13.4.1",
     "lab": "^11.2.1"
   },
