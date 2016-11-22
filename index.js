@@ -7,8 +7,8 @@ const pluginDefaults = {
 };
 
 const schemeDefaults = {
-  apiKeys: {
-  },
+  apiKeys: {},
+  validateKey: null,
   // by default the incoming POST will
   // look in request.query.token for the api key:
   queryKey: 'token',
@@ -19,18 +19,35 @@ exports.register = (server, pluginOptions, next) => {
 
   server.auth.scheme(pluginOptions.schemeName, (authServer, options) => {
     options = Hoek.applyToDefaults(schemeDefaults, options);
+
+    let validateKey = options.validateKey;
+
+    if (typeof options.validateKey !== 'function') {
+      validateKey = (token, done) => {
+        done(options.apiKeys[token]);
+      };
+
+      if (typeof options.validateKey === 'string') {
+        validateKey = Hoek.reach(server.methods, options.validateKey, {
+          default: validateKey
+        });
+      }
+    }
+
     return {
       authenticate: (request, reply) => {
         // check in both the query params and the X-API-KEY header for an api key:
         const apiKey = request.headers[options.headerKey] ?
           request.headers[options.headerKey] : request.query[options.queryKey];
         // get the credentials for this key:
-        const credentials = options.apiKeys[apiKey];
-        if (credentials !== undefined) {
-          return reply.continue({ credentials });
-        }
-        // otherwise return a 401:
-        return reply(Boom.unauthorized('Invalid API Key.'));
+
+        validateKey(apiKey, (credentials) => {
+          if (credentials !== undefined) {
+            return reply.continue({ credentials });
+          }
+          // otherwise return a 401:
+          return reply(Boom.unauthorized('Invalid API Key.'));
+        });
       }
     };
   });
