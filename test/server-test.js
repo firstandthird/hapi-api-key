@@ -272,7 +272,7 @@ lab.test('lets you pass a validate function', (done) => {
     server.auth.strategy('api-key', 'api-key', true, {
       validateKey(token, next) {
         if (token === 'test') {
-          return next({
+          return next(null, true, {
             name: 'This is a test'
           });
         }
@@ -299,7 +299,7 @@ lab.test('lets you pass a validate function', (done) => {
 lab.test('lets you pass a validate function as server method', (done) => {
   server.method('validate', (token, next) => {
     if (token === 'test') {
-      return next({
+      return next(null, true, {
         name: 'This is a test'
       });
     }

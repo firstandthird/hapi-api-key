@@ -24,13 +24,14 @@ exports.register = (server, pluginOptions, next) => {
 
     if (typeof options.validateKey !== 'function') {
       validateKey = (token, done) => {
-        done(options.apiKeys[token]);
+        done(null, true, options.apiKeys[token]);
       };
 
       if (typeof options.validateKey === 'string') {
-        validateKey = Hoek.reach(server.methods, options.validateKey, {
-          default: validateKey
-        });
+        validateKey = Hoek.reach(server.methods, options.validateKey);
+        if (!validateKey) {
+          throw new Error(`server.methods did not contain a method called ${options.validateKey}`);
+        }
       }
     }
 
@@ -41,7 +42,10 @@ exports.register = (server, pluginOptions, next) => {
           request.headers[options.headerKey] : request.query[options.queryKey];
         // get the credentials for this key:
 
-        validateKey(apiKey, (credentials) => {
+        validateKey(apiKey, (err, isValid, credentials) => {
+          if (err || !isValid) {
+            return reply(Boom.unauthorized('Invalid API key'));
+          }
           if (credentials !== undefined) {
             return reply.continue({ credentials });
           }
