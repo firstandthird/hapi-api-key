@@ -73,7 +73,6 @@ const register = (server, pluginOptions) => {
   if (pluginOptions.strategy) {
     server.auth.strategy(pluginOptions.strategy.name,
       pluginOptions.schemeName,
-      pluginOptions.strategy.mode,
       { apiKeys: pluginOptions.strategy.apiKeys });
   }
 };
