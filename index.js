@@ -14,7 +14,8 @@ const schemeDefaults = {
   queryKey: 'token',
   headerKey: 'x-api-key'
 };
-exports.register = (server, pluginOptions, next) => {
+
+const register = (server, pluginOptions) => {
   pluginOptions = Hoek.applyToDefaults(pluginDefaults, pluginOptions);
 
   server.auth.scheme(pluginOptions.schemeName, (authServer, options) => {
@@ -23,8 +24,9 @@ exports.register = (server, pluginOptions, next) => {
     let validateKey = options.validateKey;
 
     if (typeof options.validateKey !== 'function') {
-      validateKey = (token, done) => {
-        done(null, true, options.apiKeys[token]);
+      validateKey = async(token) => {
+        const ret = { isValid: true, credentials: options.apiKeys[token] };
+        return ret;
       };
 
       if (typeof options.validateKey === 'string') {
@@ -36,22 +38,23 @@ exports.register = (server, pluginOptions, next) => {
     }
 
     return {
-      authenticate: (request, reply) => {
+      authenticate: async(request, h) => {
         // check in both the query params and the X-API-KEY header for an api key:
         const apiKey = request.headers[options.headerKey] ?
           request.headers[options.headerKey] : request.query[options.queryKey];
-        // get the credentials for this key:
 
-        validateKey(apiKey, (err, isValid, credentials) => {
-          if (err || !isValid) {
-            return reply(Boom.unauthorized('Invalid API key'));
+        try {
+          // get the credentials for this key:
+          const { isValid, credentials } = await validateKey(apiKey);
+          // if they are valid then continue processing:
+          if (isValid && credentials !== undefined) {
+            return h.continue;
           }
-          if (credentials !== undefined) {
-            return reply.continue({ credentials });
-          }
-          // otherwise return a 401:
-          return reply(Boom.unauthorized('Invalid API Key.'));
-        });
+          // otherwise always return a 401:
+        } catch (err) {
+          // does not have to do anything
+        }
+        throw Boom.unauthorized('Invalid API Key.');
       }
     };
   });
@@ -70,12 +73,12 @@ exports.register = (server, pluginOptions, next) => {
   if (pluginOptions.strategy) {
     server.auth.strategy(pluginOptions.strategy.name,
       pluginOptions.schemeName,
-      pluginOptions.strategy.mode,
       { apiKeys: pluginOptions.strategy.apiKeys });
   }
-  next();
 };
 
-exports.register.attributes = {
+exports.plugin = {
+  register,
+  once: true,
   pkg: require('./package.json')
 };

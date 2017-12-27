@@ -16,12 +16,12 @@
     "hoek": "^4.0.1"
   },
   "devDependencies": {
-    "code": "4.0.0",
-    "eslint": "^3.9.1",
-    "eslint-config-firstandthird": "^3.1.0",
-    "eslint-plugin-import": "^2.1.0",
-    "hapi": "^16.0.2",
-    "lab": "^11.2.1"
+    "code": "^5.1.2",
+    "eslint": "^4.13.1",
+    "eslint-config-firstandthird": "^4.3.0",
+    "eslint-plugin-import": "^2.8.0",
+    "hapi": "^17.2.0",
+    "lab": "^15.1.2"
   },
   "keywords": [
     "hapi",
