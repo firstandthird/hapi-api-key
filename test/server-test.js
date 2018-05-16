@@ -235,3 +235,33 @@ lab.test('lets you pass a validate function as server method', async() => {
   const response = await server.inject({ url: '/?token=test' });
   code.expect(response.statusCode).to.equal(200);
 });
+
+
+lab.test('validate function works when defined in plugin options', async() => {
+  server.method('validate', (token) => {
+    if (token === 'test') {
+      return { isValid: true, credentials: { name: 'This is a test' } };
+    }
+  });
+
+  await server.register({
+    plugin: hapiApiKeyPlugin,
+    options: {
+      strategy: {
+        validateKey: 'validate',
+        name: 'serverKey'
+      }
+    }
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/',
+    config: {
+      auth: 'serverKey',
+      handler: (request, h) => request.auth
+    }
+  });
+  const response = await server.inject({ url: '/?token=test' });
+  code.expect(response.statusCode).to.equal(200);
+});
