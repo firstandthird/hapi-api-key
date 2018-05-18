@@ -24,7 +24,7 @@ const register = (server, pluginOptions) => {
     let validateKey = options.validateKey;
 
     if (typeof options.validateKey !== 'function') {
-      validateKey = async(token) => {
+      validateKey = (token) => {
         const ret = { isValid: true, credentials: options.apiKeys[token] };
         return ret;
       };
@@ -73,7 +73,7 @@ const register = (server, pluginOptions) => {
   if (pluginOptions.strategy) {
     server.auth.strategy(pluginOptions.strategy.name,
       pluginOptions.schemeName,
-      { apiKeys: pluginOptions.strategy.apiKeys });
+      pluginOptions.strategy);
   }
 };
 
