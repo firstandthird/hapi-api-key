@@ -25,6 +25,17 @@ const register = (server, pluginOptions) => {
 
     if (typeof options.validateKey !== 'function') {
       validateKey = (token) => {
+        // if the apiKeys are listed in an array, see if any match:
+        if (Array.isArray(options.apiKeys)) {
+          const key = options.apiKeys.find(entry => entry.key === token);
+          if (key) {
+            // don't need the key name in the credentials:
+            delete key.key;
+            return { isValid: true, credentials: key };
+          }
+          return { isValid: false };
+        }
+        // otherwise the api keys are listed as an object of { key: credentials } pairs:
         const ret = { isValid: true, credentials: options.apiKeys[token] };
         return ret;
       };
