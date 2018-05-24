@@ -146,6 +146,7 @@ lab.test('lets you specify a name for the param that contains the api key ', asy
     },
     queryKey: 'api'
   });
+  server.auth.default('api-key');
   server.route({
     method: 'GET',
     path: '/',
