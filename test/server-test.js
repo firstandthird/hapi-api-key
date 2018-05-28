@@ -97,6 +97,7 @@ lab.test('lets you pass a custom list of api keys ', async() => {
       }
     }
   });
+  server.auth.default('api-key');
   server.route({
     method: 'GET',
     path: '/',
@@ -104,6 +105,32 @@ lab.test('lets you pass a custom list of api keys ', async() => {
   });
   const response = await server.inject({ url: '/?token=mySpecialKey' });
   code.expect(response.statusCode).to.equal(200);
+});
+
+lab.test('api keys can also be specified in array form ', async() => {
+  await server.register({
+    plugin: hapiApiKeyPlugin,
+    options: {}
+  });
+  server.auth.strategy('api-key', 'api-key', {
+    apiKeys: [{
+      key: 'mySpecialKey',
+      name: 'Is Good'
+    }]
+  });
+  server.auth.default('api-key');
+  server.route({
+    method: 'GET',
+    path: '/',
+    config: {
+      auth: 'api-key'
+    },
+    handler: (request, h) => request.auth
+  });
+  const response = await server.inject({ url: '/?token=mySpecialKey' });
+  code.expect(response.statusCode).to.equal(200);
+  const badResponse = await server.inject({ url: '/?token=notMySpecialKey' });
+  code.expect(badResponse.statusCode).to.equal(401);
 });
 
 lab.test('lets you specify a name for the param that contains the api key ', async() => {
@@ -119,6 +146,7 @@ lab.test('lets you specify a name for the param that contains the api key ', asy
     },
     queryKey: 'api'
   });
+  server.auth.default('api-key');
   server.route({
     method: 'GET',
     path: '/',
@@ -235,7 +263,6 @@ lab.test('lets you pass a validate function as server method', async() => {
   const response = await server.inject({ url: '/?token=test' });
   code.expect(response.statusCode).to.equal(200);
 });
-
 
 lab.test('validate function works when defined in plugin options', async() => {
   server.method('validate', (token) => {
