@@ -85,6 +85,29 @@ lab.test('should allow passage if a correct api key is posted ', async() => {
   code.expect(response.statusCode).to.equal(200);
 });
 
+lab.test('will signal if authenticated', async() => {
+  await server.register({
+    plugin: hapiApiKeyPlugin,
+    options: {}
+  });
+  server.auth.strategy('api-key', 'api-key', {
+    validateKey(token) {
+      return { isValid: true, credentials: { name: 'This is a test' } };
+    },
+  });
+  server.auth.default('api-key');
+  server.route({
+    method: 'GET',
+    path: '/',
+    config: {
+      handler: (request, h) => request.auth
+    }
+  });
+  const response = await server.inject({ url: '/?token=knockknock' });
+  code.expect(response.result.isAuthenticated).to.equal(true);
+  code.expect(response.statusCode).to.equal(200);
+});
+
 lab.test('lets you pass a custom list of api keys ', async() => {
   await server.register({
     plugin: hapiApiKeyPlugin,

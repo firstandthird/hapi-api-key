@@ -59,7 +59,7 @@ const register = (server, pluginOptions) => {
           const { isValid, credentials } = await validateKey(apiKey);
           // if they are valid then continue processing:
           if (isValid && credentials !== undefined) {
-            return h.continue;
+            return h.authenticated({ credentials });
           }
           // otherwise always return a 401:
         } catch (err) {
