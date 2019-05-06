@@ -1,6 +1,6 @@
 {
   "name": "hapi-api-key",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "description": "Authentication strategy for API keys",
   "main": "index.js",
   "repository": {
