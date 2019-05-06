@@ -1,6 +1,6 @@
 'use strict';
 const Boom = require('boom');
-const Hoek = require('hoek');
+const Hoek = require('@hapi/hoek');
 
 const pluginDefaults = {
   schemeName: 'api-key'

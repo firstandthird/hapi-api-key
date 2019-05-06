@@ -1,7 +1,7 @@
 'use strict';
-const Hapi = require('hapi');
+const Hapi = require('@hapi/hapi');
 const code = require('code');
-const lab = exports.lab = require('lab').script();
+const lab = exports.lab = require('@hapi/lab').script();
 const hapiApiKeyPlugin = require('../index.js');
 
 let server;
