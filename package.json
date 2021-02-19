@@ -32,5 +32,6 @@
   "scripts": {
     "lint": "eslint .",
     "test": "lab -e test"
-  }
+  },
+  "license": "MIT"
 }
