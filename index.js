@@ -1,5 +1,5 @@
 'use strict';
-const Boom = require('boom');
+const Boom = require('@hapi/boom');
 const Hoek = require('@hapi/hoek');
 
 const pluginDefaults = {
@@ -56,7 +56,7 @@ const register = (server, pluginOptions) => {
 
         try {
           // get the credentials for this key:
-          const { isValid, credentials } = await validateKey(apiKey);
+          const { isValid, credentials } = await validateKey(apiKey, request);
           // if they are valid then continue processing:
           if (isValid && credentials !== undefined) {
             return h.authenticated({ credentials });

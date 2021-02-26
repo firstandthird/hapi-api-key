@@ -13,7 +13,7 @@
   "homepage": "https://github.com/firstandthird/hapi-api-key",
   "dependencies": {
     "@hapi/hoek": "^6.1.3",
-    "boom": "^7.3.0"
+    "@hapi/boom": "^7.4.3"
   },
   "devDependencies": {
     "code": "^5.1.2",
