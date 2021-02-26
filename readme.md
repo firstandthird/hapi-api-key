@@ -22,7 +22,7 @@ to make the 'api-key' scheme available for use with server.auth.strategy(...).
   server.auth.strategy('api-key', 'api-key', {
     apiKeys: {
       1234: {
-        name: 'Michiel'
+        name: 'hueniverse'
       }
     }
   });
